@@ -1,6 +1,8 @@
-package com.mackenzie.cif.person.domain;
+package com.mackenzie.cif.person.domain.service;
 
+import com.mackenzie.cif.person.domain.domain.Patient;
 import com.mackenzie.cif.person.domain.dto.PatientDTO;
+import com.mackenzie.cif.person.domain.repository.PatientRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -49,6 +51,10 @@ public class PatientService {
             return null;
         }
         return patientDTO;
+    }
+
+    public PatientDTO registerPatient(Patient patient){
+        return PatientDTO.create(repository.save(patient));
     }
 
 }
