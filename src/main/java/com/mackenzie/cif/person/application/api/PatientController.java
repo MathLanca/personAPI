@@ -1,16 +1,17 @@
-package com.mackenzie.cif.person.api;
+package com.mackenzie.cif.person.application.api;
 
-import com.mackenzie.cif.person.domain.PatientService;
+import com.mackenzie.cif.person.application.conversor.PatientConversor;
+import com.mackenzie.cif.person.common.AES;
+import com.mackenzie.cif.person.domain.domain.Patient;
 import com.mackenzie.cif.person.domain.dto.PatientDTO;
+import com.mackenzie.cif.person.domain.service.PatientService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,6 +22,9 @@ public class PatientController {
 
     @Autowired
     private PatientService service;
+
+    @Value("${secret.key}")
+    private String KEY;
 
     @GetMapping("/listAll")
     public ResponseEntity listAllPatients(@RequestParam @Nullable Integer page, @RequestParam @Nullable Integer pageSize){
@@ -61,5 +65,28 @@ public class PatientController {
             return new ResponseEntity(notFound,HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity(patientDTO,HttpStatus.OK);
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity registerPatient(@RequestBody PatientDTO body){
+        Patient patient = null;
+        PatientDTO resposne;
+
+
+
+        try {
+            body.getPerson().setPassword(AES.encrypt(body.getPerson().getPassword(),KEY));
+            patient = PatientConversor.patientDtoToPatient(body);
+        }catch (Exception e){
+            log.error("Could not convert PatientDTO to Patient");
+            return new ResponseEntity("Could not convert PatientDTO to Patient", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        try{
+            resposne = service.registerPatient(patient);
+        }catch (Exception e){
+            log.error("Could not register the patient");
+            return new ResponseEntity("Could not register the patient", HttpStatus.NOT_MODIFIED);
+        }
+        return new ResponseEntity(resposne,HttpStatus.CREATED);
     }
 }
