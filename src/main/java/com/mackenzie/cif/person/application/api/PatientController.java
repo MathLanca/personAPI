@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -68,10 +69,9 @@ public class PatientController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity registerPatient(@RequestBody PatientDTO body){
+    public ResponseEntity registerPatient(@RequestBody @Valid PatientDTO body){
         Patient patient = null;
         PatientDTO resposne;
-
 
 
         try {
