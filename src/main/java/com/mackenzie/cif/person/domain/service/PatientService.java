@@ -1,5 +1,6 @@
 package com.mackenzie.cif.person.domain.service;
 
+import com.mackenzie.cif.person.domain.domain.Adress;
 import com.mackenzie.cif.person.domain.domain.Patient;
 import com.mackenzie.cif.person.domain.dto.PatientDTO;
 import com.mackenzie.cif.person.domain.repository.PatientRepository;
@@ -36,7 +37,6 @@ public class PatientService {
         return patients;
     }
 
-
     public PatientDTO findPatientById(Integer id){
         log.info("Service find patient by id >>>>>");
         Optional<Patient> patient = null;
@@ -55,6 +55,29 @@ public class PatientService {
 
     public PatientDTO registerPatient(Patient patient){
         return PatientDTO.create(repository.save(patient));
+    }
+
+    public PatientDTO updateRegister(Patient patient, Integer id){
+        Optional<Patient> optional = repository.findById(id);
+
+        if(optional.isPresent()){
+            Patient db = optional.get();
+            db.setTherapistID(patient.getTherapistID());
+            db.setNote(patient.getNote());
+            db.setAdress(patient.getAdress());
+            db.setPerson(patient.getPerson());
+            repository.save(db);
+            return PatientDTO.create(db);
+        }else{
+            throw new RuntimeException("Could not update registry");
+        }
+    }
+
+    public boolean delete(Integer id){
+        if(repository.findById(id).map(PatientDTO::create).isPresent()){
+            repository.deleteById(id);
+            return true;
+        } return false;
     }
 
 }

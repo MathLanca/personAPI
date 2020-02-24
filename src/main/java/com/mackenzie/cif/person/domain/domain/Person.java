@@ -3,6 +3,7 @@ package com.mackenzie.cif.person.domain.domain;
 import lombok.Data;
 
 import javax.persistence.Embeddable;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -17,6 +18,7 @@ public class Person {
     private String lastName;
 
     @NotNull
+    @Email
     private String email;
 
     @NotNull

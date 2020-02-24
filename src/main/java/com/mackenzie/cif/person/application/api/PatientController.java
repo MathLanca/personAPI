@@ -89,4 +89,20 @@ public class PatientController {
         }
         return new ResponseEntity(resposne,HttpStatus.CREATED);
     }
+
+    @PutMapping("/updateRegister/{id}")
+    public ResponseEntity updateRegister(@PathVariable Integer id,@RequestBody @Valid PatientDTO body){
+        body.setPatientID(id);
+        PatientDTO response = null;
+        try {
+            response = service.updateRegister(PatientConversor.patientDtoToPatient(body), id);
+        }catch (Exception e){
+            return new ResponseEntity("Could not update register",HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        if(response == null){
+            return new ResponseEntity("Could not found patient with ID: "+id, HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity(response, HttpStatus.OK);
+    }
+
 }

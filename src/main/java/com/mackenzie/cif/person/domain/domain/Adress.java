@@ -4,6 +4,8 @@ import lombok.Data;
 
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
 
 @Data
 @Embeddable
@@ -12,6 +14,7 @@ public class Adress {
     private String publicPlace;
 
     @NotNull
+    @Positive
     private Integer houseNumber;
 
     @NotNull
@@ -24,5 +27,6 @@ public class Adress {
     private String state;
 
     @NotNull
+    @Size(min = 8, max = 8)
     private String postalCode;
 }

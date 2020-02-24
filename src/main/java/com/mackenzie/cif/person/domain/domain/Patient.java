@@ -23,4 +23,12 @@ public class Patient {
 
     private Integer therapistID;
     private String note;
+
+    public void setAdress(Adress adress){
+        this.adress = adress;
+    }
+
+    public void person(Person person){
+        this.person = person;
+    }
 }
