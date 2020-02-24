@@ -70,11 +70,11 @@ public class PatientController {
 
     @PostMapping("/register")
     public ResponseEntity registerPatient(@RequestBody @Valid PatientDTO body){
+        log.info("Register patient started >>>>>");
         Patient patient = null;
         PatientDTO resposne;
-
-
         try {
+            body.setActive(true);
             body.getPerson().setPassword(AES.encrypt(body.getPerson().getPassword(),KEY));
             patient = PatientConversor.patientDtoToPatient(body);
         }catch (Exception e){
@@ -90,14 +90,15 @@ public class PatientController {
         return new ResponseEntity(resposne,HttpStatus.CREATED);
     }
 
-    @PutMapping("/updateRegister/{id}")
-    public ResponseEntity updateRegister(@PathVariable Integer id,@RequestBody @Valid PatientDTO body){
+    @PutMapping("/updatePatient/{id}")
+    public ResponseEntity updatePatient(@PathVariable Integer id,@RequestBody @Valid PatientDTO body){
+        log.info("Update patient started >>>>>");
         body.setPatientID(id);
         PatientDTO response = null;
         try {
-            response = service.updateRegister(PatientConversor.patientDtoToPatient(body), id);
+            response = service.updatePatient(PatientConversor.patientDtoToPatient(body), id);
         }catch (Exception e){
-            return new ResponseEntity("Could not update register",HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity("Could not update patient",HttpStatus.INTERNAL_SERVER_ERROR);
         }
         if(response == null){
             return new ResponseEntity("Could not found patient with ID: "+id, HttpStatus.NOT_FOUND);
@@ -105,4 +106,13 @@ public class PatientController {
         return new ResponseEntity(response, HttpStatus.OK);
     }
 
+    @DeleteMapping("/deletePatient/{id}")
+    public ResponseEntity deletePatient(@PathVariable Integer id){
+        try{
+            service.delete(id);
+        }catch (Exception e){
+            return new ResponseEntity("Could not delete patient",HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
 }

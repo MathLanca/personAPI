@@ -6,6 +6,7 @@ import javax.persistence.Embeddable;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.time.LocalDate;
 
 @Data
 @Embeddable
@@ -16,6 +17,9 @@ public class Person {
 
     @NotNull
     private String lastName;
+
+    @NotNull
+    private LocalDate birthDate;
 
     @NotNull
     @Email

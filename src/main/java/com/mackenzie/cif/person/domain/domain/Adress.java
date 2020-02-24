@@ -27,6 +27,6 @@ public class Adress {
     private String state;
 
     @NotNull
-    @Size(min = 8, max = 8)
+    @Size(min = 8,max = 8)
     private String postalCode;
 }

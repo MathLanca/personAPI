@@ -1,6 +1,6 @@
 package com.mackenzie.cif.person.domain.service;
 
-import com.mackenzie.cif.person.domain.domain.Adress;
+import com.mackenzie.cif.person.common.AES;
 import com.mackenzie.cif.person.domain.domain.Patient;
 import com.mackenzie.cif.person.domain.dto.PatientDTO;
 import com.mackenzie.cif.person.domain.repository.PatientRepository;
@@ -27,13 +27,14 @@ public class PatientService {
 
     public List<PatientDTO> listAllPatients(){
         log.info("Service list all patients >>>>>");
-        List<PatientDTO> patients = repository.findAll().stream().map(PatientDTO::create).collect(Collectors.toList());
+        List<PatientDTO> patients = repository.findAllByActive(true).stream().map(PatientDTO::create).collect(Collectors.toList());
         return patients;
     }
     public List<PatientDTO> listAllPatients(Integer initialIndex, Integer finalIndex){
         log.info("Service list all patients >>>>>");
         Pageable firstPageWithTwoElements = PageRequest.of(initialIndex, finalIndex);
         List<PatientDTO> patients = repository.findAll(firstPageWithTwoElements).stream().map(PatientDTO::create).collect(Collectors.toList());
+        patients.removeIf(patientDTO -> patientDTO.getActive());
         return patients;
     }
 
@@ -44,6 +45,9 @@ public class PatientService {
         try{
             patient = repository.findById(id);
             patientDTO = PatientDTO.create(patient.get());
+            if(!patientDTO.getActive()){
+                return null;
+            }
         }catch (Exception e){
             log.error("Could not get patient with id {}", id);
             log.error(e.getMessage());
@@ -54,14 +58,17 @@ public class PatientService {
     }
 
     public PatientDTO registerPatient(Patient patient){
+        patient.getPerson().setPassword(AES.encrypt(patient.getPerson().getPassword(),KEY));
         return PatientDTO.create(repository.save(patient));
     }
 
-    public PatientDTO updateRegister(Patient patient, Integer id){
+    public PatientDTO updatePatient(Patient patient, Integer id){
         Optional<Patient> optional = repository.findById(id);
 
         if(optional.isPresent()){
             Patient db = optional.get();
+            if(!db.getPerson().getPassword().equals(patient.getPerson().getPassword()))
+                patient.getPerson().setPassword(AES.encrypt(patient.getPerson().getPassword(),KEY));
             db.setTherapistID(patient.getTherapistID());
             db.setNote(patient.getNote());
             db.setAdress(patient.getAdress());
@@ -73,11 +80,16 @@ public class PatientService {
         }
     }
 
-    public boolean delete(Integer id){
-        if(repository.findById(id).map(PatientDTO::create).isPresent()){
-            repository.deleteById(id);
-            return true;
-        } return false;
+    public void delete(Integer id){
+        Optional<Patient> optional = repository.findById(id);
+
+        if(optional.isPresent()){
+            Patient db = optional.get();
+            db.setActive(false);
+            repository.save(db);
+        }else{
+            throw new RuntimeException("Could not delete patient");
+        }
     }
 
 }

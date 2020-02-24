@@ -24,6 +24,8 @@ public class Patient {
     private Integer therapistID;
     private String note;
 
+    private Boolean active;
+
     public void setAdress(Adress adress){
         this.adress = adress;
     }

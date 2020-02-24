@@ -26,6 +26,8 @@ public class PatientDTO {
 
     private String note;
 
+    private Boolean active;
+
     public static PatientDTO create(Patient p){
         ModelMapper modelMapper = new ModelMapper();
         return modelMapper.map(p, PatientDTO.class);
