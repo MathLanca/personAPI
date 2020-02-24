@@ -133,4 +133,15 @@ public class PatientController {
         }
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
+
+    @PutMapping("/reactivatePatient/{id}")
+    public ResponseEntity reactivatePatient(@PathVariable Integer id){
+        PatientDTO response = null;
+        try{
+            response = service.reactivatePatient(id);
+        }catch (Exception e){
+            return new ResponseEntity("Could not reactivate patient",HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity(response, HttpStatus.OK);
+    }
 }
