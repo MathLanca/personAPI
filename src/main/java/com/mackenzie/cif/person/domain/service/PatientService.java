@@ -58,6 +58,7 @@ public class PatientService {
     }
 
     public PatientDTO registerPatient(Patient patient){
+        patient.setActive(true);
         patient.getPerson().setPassword(AES.encrypt(patient.getPerson().getPassword(),KEY));
         return PatientDTO.create(repository.save(patient));
     }
@@ -80,6 +81,19 @@ public class PatientService {
         }
     }
 
+    public PatientDTO updatePassword(String password, Integer id){
+        Optional<Patient> optional = repository.findById(id);
+
+        if(optional.isPresent()){
+            Patient db = optional.get();
+            db.getPerson().setPassword(AES.encrypt(password,KEY));
+            repository.save(db);
+            return PatientDTO.create(db);
+        }else{
+            throw new RuntimeException("Could not update password");
+        }
+    }
+
     public void delete(Integer id){
         Optional<Patient> optional = repository.findById(id);
 
@@ -89,6 +103,18 @@ public class PatientService {
             repository.save(db);
         }else{
             throw new RuntimeException("Could not delete patient");
+        }
+    }
+
+    public PatientDTO reactivatePatient(Integer id){
+        Optional<Patient> optional = repository.findById(id);
+        if(optional.isPresent()){
+            Patient db = optional.get();
+            db.setActive(true);
+            repository.save(db);
+            return  PatientDTO.create(db);
+        }else{
+            throw new RuntimeException("Could not activate patient");
         }
     }
 

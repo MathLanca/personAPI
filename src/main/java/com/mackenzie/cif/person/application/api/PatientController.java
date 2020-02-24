@@ -1,7 +1,6 @@
 package com.mackenzie.cif.person.application.api;
 
 import com.mackenzie.cif.person.application.conversor.PatientConversor;
-import com.mackenzie.cif.person.common.AES;
 import com.mackenzie.cif.person.domain.domain.Patient;
 import com.mackenzie.cif.person.domain.dto.PatientDTO;
 import com.mackenzie.cif.person.domain.service.PatientService;
@@ -74,8 +73,6 @@ public class PatientController {
         Patient patient = null;
         PatientDTO resposne;
         try {
-            body.setActive(true);
-            body.getPerson().setPassword(AES.encrypt(body.getPerson().getPassword(),KEY));
             patient = PatientConversor.patientDtoToPatient(body);
         }catch (Exception e){
             log.error("Could not convert PatientDTO to Patient");
@@ -102,6 +99,27 @@ public class PatientController {
         }
         if(response == null){
             return new ResponseEntity("Could not found patient with ID: "+id, HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity(response, HttpStatus.OK);
+    }
+
+    @PutMapping("/updatePassword/{id}")
+    public ResponseEntity updatePassword(@RequestParam String password, @PathVariable Integer id){
+        log.info("Update password started >>>>>");
+        if(password == null || password.equals("")) {
+            return new ResponseEntity("Password must not be null", HttpStatus.BAD_REQUEST);
+        }
+        if(password.length() < 6 || password.length() > 8){
+            return new ResponseEntity("Password must be at least 6 characters and at most 8", HttpStatus.BAD_REQUEST);
+        }
+        PatientDTO response = null;
+        try {
+            response = service.updatePassword(password, id);
+        }catch (Exception e){
+            return new ResponseEntity("Could not update password",HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        if(response == null){
+            return new ResponseEntity("Could not found password from ID: "+id, HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity(response, HttpStatus.OK);
     }
