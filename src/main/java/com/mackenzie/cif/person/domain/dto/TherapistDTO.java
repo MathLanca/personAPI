@@ -1,6 +1,8 @@
 package com.mackenzie.cif.person.domain.dto;
 
-import com.mackenzie.cif.person.domain.Therapist;
+import com.mackenzie.cif.person.domain.domain.Adress;
+import com.mackenzie.cif.person.domain.domain.Person;
+import com.mackenzie.cif.person.domain.domain.Therapist;
 import lombok.Data;
 import org.modelmapper.ModelMapper;
 
@@ -8,21 +10,16 @@ import org.modelmapper.ModelMapper;
 public class TherapistDTO {
     private Integer therapistID;
 
-    private String firstName;
-    private String lastName;
-    private String email;
-    private String password;
-    private String sex;
-    private String telephoneNumber;
-    private String publicPlace;
-    private Integer houseNumber;
-    private String city;
-    private String state;
-    private String postalCode;
+    private Person person;
+    private Adress adress;
     private String crefito;
+
+    private Boolean active;
 
     public static TherapistDTO create(Therapist t){
         ModelMapper modelMapper = new ModelMapper();
         return modelMapper.map(t, TherapistDTO.class);
     }
+
+
 }
