@@ -1,3 +1,4 @@
+/*
 package com.mackenzie.cif.person.domain.repository;
 
 import com.mackenzie.cif.person.domain.domain.Therapist;
@@ -12,3 +13,4 @@ public interface TherapistRepository extends MongoRepository<Therapist, String> 
 
     Boolean existsByPersonEmailAndPersonPassword(String email, String password);
 }
+*/

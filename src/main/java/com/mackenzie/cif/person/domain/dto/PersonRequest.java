@@ -1,21 +1,21 @@
-package com.mackenzie.cif.person.domain.domain;
+package com.mackenzie.cif.person.domain.dto;
 
+import com.mackenzie.cif.person.domain.domain.Address;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 @Data
 @Document(collection = "Person")
-public class Person {
+public class PersonRequest {
 
     @Id
     private String id;
-
-    private String cpf;
 
     @NotNull
     private String firstName;
@@ -31,6 +31,7 @@ public class Person {
     private String email;
 
     @NotNull
+    @Size(min = 6, max = 8)
     private String password;
 
     private String sex;
@@ -39,7 +40,9 @@ public class Person {
 
     private Address address;
 
-    private Patient patient;
+    private String cpf;
+
+    private PatientRequest patient;
 
     private Boolean active;
 

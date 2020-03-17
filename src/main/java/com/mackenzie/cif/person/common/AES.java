@@ -63,7 +63,7 @@ public class AES {
     }
 
     public static void main(String[] args) {
-        System.out.println(decrypt("55tRRdflS3L3640KC514jw==", "cifApiSecretKey2020"));
+        System.out.println(decrypt("xGG3DougfdDJ8J4AmOKtMw==", "cifApiSecretKey2020"));
     }
 }
 

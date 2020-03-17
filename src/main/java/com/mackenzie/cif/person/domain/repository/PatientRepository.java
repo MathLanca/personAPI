@@ -1,3 +1,4 @@
+/*
 package com.mackenzie.cif.person.domain.repository;
 
 import com.mackenzie.cif.person.domain.domain.Patient;
@@ -16,3 +17,4 @@ public interface PatientRepository extends MongoRepository<Patient, String> {
 }
 
 
+*/
