@@ -88,6 +88,26 @@ public class PersonController {
     }
 
     @CrossOrigin(origins = "*")
+    @GetMapping("/findPatientsByTherapist/{id}")
+    public ResponseEntity findPatientsByTherapist(@PathVariable String id) {
+        log.info("findPatientsByTherapist>>>>>");
+
+        List<Person> patients = null;
+        try {
+            patients = service.findPatientsByTherapist(id);
+        } catch (Exception e) {
+            log.error("Error while finding patients from therapist " + id, e.getMessage());
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        if (patients == null) {
+            String notFound = "NO_PATIENTS_FOR_THERAPIST";
+            return new ResponseEntity(notFound, HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity(patients, HttpStatus.OK);
+    }
+
+    @CrossOrigin(origins = "*")
     @GetMapping("/findById/{id}")
     public ResponseEntity findPersonById(@PathVariable String id) {
         log.info("Find person by id started >>>>>");

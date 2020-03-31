@@ -49,4 +49,10 @@ public interface PersonRepository extends MongoRepository<Person, String> {
      * @return true if exists a person with these params or false if not
      */
     Boolean existsByCpfAndPassword(String cpf, String password);
+
+    /*
+     * @param id
+     * @return All patients from some therapist
+     */
+    List<Person> findAllByPatientNotNullAndPatientTherapistId(String id);
 }

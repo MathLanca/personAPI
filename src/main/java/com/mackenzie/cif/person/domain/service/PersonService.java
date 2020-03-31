@@ -163,4 +163,14 @@ public class PersonService {
         return person;
     }
 
+    public List<Person> findPatientsByTherapist(String id){
+        List<Person> person = null;
+        try{
+            person = repository.findAllByPatientNotNullAndPatientTherapistId(id);
+        }catch (Exception e){
+            log.error("Erro while trying to list patients from therapist", e.getMessage());
+            throw e;
+        }
+        return person;
+    }
 }

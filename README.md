@@ -168,6 +168,53 @@ Possiveis Retornos
 | 404 | `NOT FOUND` |   `Could not find person` |
 | 500 | `INTERNAL SERVER ERROR` |  `Error while finding person with ID [ID]` |
 
+Find By ID
+-
+* Retorna os pacientes referente ao ID do terapeuta recebido
+```http
+ GET /v1/person/findPatientsByTherapist/{id}
+```
+|   Where   | Parameter | Type | Description |  Required    |
+| :--- | :--- | :--- | :--- | :--- |
+| `path` | `id` | `string` | Person ID  |  **TRUE**    |
+
+Example Response
+```json
+[
+    {
+        "id": "string",
+        "cpf": "string",
+        "firstName": "string",
+        "lastName": "string",
+        "birthDate": "date time",
+        "email": "sintr",
+        "password": "string",
+        "sex": "string",
+        "telephoneNumber": "string",
+        "address": {
+            "publicPlace": "string",
+            "houseNumber": 213,
+            "neighborhood": "string",
+            "city": "string",
+            "state": "string",
+            "postalCode": "string"
+        },
+        "active": true
+    }
+]
+```
+
+## Status Codes
+
+Possiveis Retornos
+
+| Status Code | Description |
+| :--- | :--- |
+| 200 | `OK` | [RESPONSE] |
+| 400 | `BAD REQUEST` | 
+| 404 | `NOT FOUND` |   
+| 500 | `INTERNAL SERVER ERROR` | 
+
 Login
 -
 * Verifica as informações passadas e se estiverem corretas, retornam as informações dos mesmos
