@@ -142,9 +142,9 @@ public class PersonService {
         try {
             log.info("validating existence of person");
             if(userLogin.contains("@")){
-                exist = repository.existsByEmailAndPassword(userLogin, password);
+                exist = repository.existsByEmailAndPasswordAndActiveIsTrue(userLogin, password);
             }else{
-                exist = repository.existsByCpfAndPassword(userLogin, password);
+                exist = repository.existsByCpfAndPasswordAndActiveIsTrue(userLogin, password);
             }
         } catch (Exception e) {
             log.error("Error while validating userLogin and password");

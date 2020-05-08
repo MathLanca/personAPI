@@ -41,14 +41,14 @@ public interface PersonRepository extends MongoRepository<Person, String> {
      * @param password
      * @return true if exists a person with these params or false if not
      */
-    Boolean existsByEmailAndPassword(String email, String password);
+    Boolean existsByEmailAndPasswordAndActiveIsTrue(String email, String password);
 
     /*
      * @param cpf
      * @param password
      * @return true if exists a person with these params or false if not
      */
-    Boolean existsByCpfAndPassword(String cpf, String password);
+    Boolean existsByCpfAndPasswordAndActiveIsTrue(String cpf, String password);
 
     /*
      * @param id
