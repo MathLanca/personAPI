@@ -83,7 +83,7 @@ public class PersonController {
         try {
             therapists = service.listAllTherapist();
         } catch (Exception e) {
-            return new ResponseEntity<>("Could not retrieve list of therapists", HttpStatus.OK);
+            return new ResponseEntity<>("Could not retrieve list of therapists", HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity<>(therapists, HttpStatus.OK);
     }
